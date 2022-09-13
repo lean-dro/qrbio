@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "qrbio",
+    "slug": "qrbio",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
