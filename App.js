@@ -2,51 +2,56 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Linking } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "./assets/css/style";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-const [hasPermission, setHasPermission] = useState(null);
-const [scanned, setScanned] = useState(false);
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-useEffect(() => {
-  const getBarCodeScannerPermissions = async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
-    setHasPermission(status === "granted");
-  };
-
-  getBarCodeScannerPermissions();
-}, []);
-
-const handleBarCodeScanned = ({ type, data }) => {
-  setScanned(true);
-  Linking.openURL(`${data}`);
-};
-
-
-
-
-function Dev({ navigation }) {
-  return ( 
-  <View style={styles.container}>
+function QR({ navigation }) {
+  return (
+    <View style={styles.container}>
       <Text style></Text>
-  </View>);
+    </View>
+  );
+}
+function Dev({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style></Text>
+    </View>
+  );
 }
 
 function Scanner({ navigation }) {
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-r  
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    };
+
+    getBarCodeScannerPermissions();
+  }, []);
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    Linking.openURL(`${data}`);
+  };
+
+
   return (
     <View style={styles.container}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        style={{width: 300, height: 600}}
       />
+      {scanned && (
+        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+      )}
     </View>
   );
 }
@@ -57,8 +62,36 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Scanner" component={Scanner} />
-        <Tab.Screen name="Dev" component={Dev} />
+        <Tab.Screen
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="scan-outline" color={color} size={size} />
+            ),
+          }}
+          name="Scanner"
+          component={Scanner}
+        />
+        <Tab.Screen
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="qr-code" color={color} size={size} />
+            ),
+          }}
+          name="QR"
+          component={QR}
+        />
+        <Tab.Screen
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="rabbit" color={color} size={size} />
+            ),
+          }}
+          name="Dev"
+          component={Dev}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
