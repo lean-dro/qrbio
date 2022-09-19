@@ -32,9 +32,7 @@ export default function Scanner({ navigation }) {
           height: "100%",
         }}
       />
-      {scanned && (
-        <Button title={"Ler novamente"} onPress={() => setScanned(false)} />
-      )}
+
       <View style={styles.scanner}>
         <Ionicons
           name="scan-outline"
