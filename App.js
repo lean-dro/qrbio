@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Linking } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -8,53 +8,9 @@ import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
-function QR({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Text style></Text>
-    </View>
-  );
-}
-function Dev({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Text style></Text>
-    </View>
-  );
-}
-
-function Scanner({ navigation }) {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-
-  useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-
-    getBarCodeScannerPermissions();
-  }, []);
-
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    Linking.openURL(`${data}`);
-  };
-
-
-  return (
-    <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={{width: 300, height: 600}}
-      />
-      {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )}
-    </View>
-  );
-}
+import Scanner from "./views/Scanner";
+import QR from "./views/Qr";
+import Dev from "./views/Dev";
 
 const Tab = createBottomTabNavigator();
 
@@ -66,7 +22,7 @@ export default function App() {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="scan-outline" color={color} size={size} />
+              <Ionicons name="scan-circle-outline" color={color} size={size} />
             ),
           }}
           name="Scanner"
@@ -100,7 +56,7 @@ export default function App() {
 // expo install expo-barcode-scanner
 // npx expo install expo-font
 // expo install expo-permissions
-
+// expo install @expo-google-fonts/inter expo-font
 // npm install @react-navigation/native
 // npx expo install react-native-screens react-native-safe-area-context
 // npm install @react-navigation/bottom-tabs
